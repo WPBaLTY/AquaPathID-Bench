@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "note": "ENA 公共 ONT 数据外部验证配置。检索各物种 MinION/GridION WGS runs，选择 50-500MB 的中小规模 run；BLASTN(megablast) 对训练参考集作真值，再对比模型输出。",
+  "fastq_bytes_min": 50000000,
+  "fastq_bytes_max": 600000000,
+  "blast_cov_min": 0.5,
+  "blast_ident_min": 0.85,
+  "max_reads": 200000,
+  "target_species": [
+    {"slug": "vibrio_parahaemolyticus", "taxid": 670},
+    {"slug": "vibrio_vulnificus", "taxid": 672},
+    {"slug": "vibrio_alginolyticus", "taxid": 671},
+    {"slug": "aeromonas_hydrophila", "taxid": 648},
+    {"slug": "aeromonas_veronii", "taxid": 107606},
+    {"slug": "edwardsiella_tarda", "taxid": 636},
+    {"slug": "streptococcus_agalactiae", "taxid": 1319},
+    {"slug": "lactococcus_garvieae", "taxid": 1360},
+    {"slug": "yersinia_ruckeri", "taxid": 629},
+    {"slug": "vibrio_cholerae", "taxid": 666, "role": "decoy"},
+    {"slug": "escherichia_coli", "taxid": 562, "role": "decoy"}
+  ]
+}
