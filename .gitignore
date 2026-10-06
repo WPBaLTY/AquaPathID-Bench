@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pt
+*.npz
+*.fna.gz
+*.fastq.gz
+AquaPathID_data/
+data/
+results/
+logs/
+*.log
+.DS_Store
