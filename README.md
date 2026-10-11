@@ -44,7 +44,7 @@ python prior_corrected.py      # 9. Prior-corrected operating point
 
 ## Citation
 
-> Wang, P., Wang, H., Zhou, Y., & Zhang, D. Species-level identification of aquaculture pathogens from nanopore reads on edge hardware. *Computers and Electronics in Agriculture* (submitted).
+> Wang, P., Wang, H., Wang, Z., Zhou, Y., & Zhang, D. Species-level identification of aquaculture pathogens from nanopore reads on edge hardware. *Computers and Electronics in Agriculture* (submitted).
 
 ## License
 
