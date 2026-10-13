@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "note": "病原体=正类(target)；背景菌=干扰类(decoy)。close_relative_of 标注与某病原近缘、易混淆的背景菌。strains: 每物种最多下载的基因组数（>=3时留出未见菌株做测试）。",
+  "note": "Pathogens are the positive classes (targets); background bacteria are decoys. close_relative_of marks decoys that are close relatives of, and easily confused with, a pathogen. strains: maximum number of assemblies downloaded per species (when >=3, one unseen strain is held out for testing).",
   "max_strains_pathogen": 4,
   "max_strains_decoy": 2,
   "pathogens": [

@@ -410,7 +410,7 @@ def main() -> None:
              res["model_agreement_with_blast_truth"],
              res["model_reads_per_second"])
     append_execution_log(
-        f"实测验证 {args.run} ({expect}) | reads={len(records)} | "
+        f"field validation {args.run} ({expect}) | reads={len(records)} | "
         f"agreement={res['model_agreement_with_blast_truth']:.3f} | "
         f"results/real_data_{args.run}.json")
 

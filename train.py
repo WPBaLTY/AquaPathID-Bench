@@ -260,8 +260,8 @@ def main() -> None:
             "seed": SEED, "segments_per_class": args.segments_per_class}
     save_json(save, RESULTS_DIR / f"train_{out_name}.json")
     append_execution_log(
-        f"训练 {out_name} arch={args.arch} | width={args.width} 参数={n_params} "
-        f"best_val_mF1={best_f1:.4f} 用时={save['train_seconds']}s | "
+        f"trained {out_name} arch={args.arch} | width={args.width} params={n_params} "
+        f"best_val_mF1={best_f1:.4f} time={save['train_seconds']}s | "
         f"results/train_{out_name}.json")
     log.info("TRAIN DONE best_val_macro_f1=%.4f", best_f1)
 

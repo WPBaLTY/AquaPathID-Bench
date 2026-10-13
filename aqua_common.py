@@ -117,7 +117,7 @@ def seq_to_array(seq: str) -> np.ndarray:
 
 
 def append_execution_log(line: str) -> None:
-    """Append one row to EXECUTION_LOG.md (全程留痕)."""
+    """Append one row to EXECUTION_LOG.md."""
     stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     log_path = PROJECT_ROOT / "EXECUTION_LOG.md"
     with open(log_path, "a", encoding="utf-8") as f:

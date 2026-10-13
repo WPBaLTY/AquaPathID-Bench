@@ -138,7 +138,7 @@ def main() -> None:
         log.info("minimap2 %s: acc=%.4f mF1=%.4f", set_name, m["acc"],
                  m["macro_f1"])
     save_json(rt, RESULTS_DIR / "runtime_benchmark_minimap2.json")
-    append_execution_log("minimap2 基线完成 | results/eval_*_minimap2.json")
+    append_execution_log("minimap2 baseline done | results/eval_*_minimap2.json")
 
 
 if __name__ == "__main__":

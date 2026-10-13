@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "note": "ONT 读段模拟参数。错误类型比例参照已发表 ONT R9.4/Guppy 与 R10.4/Dorado 数据特征：mismatch 约占一半以上，indel 中 deletion 略多；homopolymer 区 deletion 概率加倍（ONT 已知特性）。总错误率 profiles 为锚点，训练时在区间内对数均匀采样。",
+  "note": "ONT read-simulation parameters. Error-type ratios follow published R9.4/Guppy and R10.4/Dorado characteristics: mismatches dominate (>50%), with slightly more deletions than insertions; homopolymer runs double the deletion probability (a known ONT artefact). The total-error profiles are anchors; training samples the total error rate log-uniformly within the range below.",
   "error_type_ratio": {"mismatch": 0.55, "insert": 0.22, "delete": 0.23},
   "profiles": {
     "r10_dorado": {"total": 0.028},

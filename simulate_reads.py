@@ -425,7 +425,7 @@ def main() -> None:
     save_npz("t6_virus_test.npz", np.concatenate(Xl), np.concatenate(yl),
              {k: np.concatenate([m[k] for m in ml]) for k in ml[0]})
 
-    append_execution_log("数据集构建 | t0-t6 全部落盘（见 $AQUAPATHID_DATA/reads/）| 日志 logs/01_*.log")
+    append_execution_log("dataset build | t0-t6 written (see $AQUAPATHID_DATA/reads/) | log logs/01_*.log")
     log.info("ALL TEST SETS DONE")
 
 

@@ -270,7 +270,7 @@ def main() -> None:
         eval_bacteria(log, device)
     if "virus" in args.tasks:
         eval_virus(log, device)
-    append_execution_log("评估完成 | T1-T6 指标落盘 results/eval_*.json | logs/04_*.log")
+    append_execution_log("evaluation done | T1-T6 metrics written | results/eval_*.json")
 
 
 if __name__ == "__main__":

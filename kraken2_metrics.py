@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-"""Kraken2 官方基线指标（WSL 跑完 kraken2 后在 Windows 侧执行）：
-解析 .k2.out → taxid → 25 类预测（目标物种=类，其余含未分类=背景 24）→
-macro-F1/acc → results/eval_{set}_kraken2.json
+"""Kraken2 official-baseline metrics (run after Kraken2 has produced .k2.out
+files under WSL): parse .k2.out -> taxid -> 25-class predictions (target
+species = their own class; anything above species rank or unclassified =
+background) -> macro-F1 / accuracy -> results/eval_*_kraken2.json
 """
 import os
 import json
@@ -27,7 +28,7 @@ targets = label_map["bacteria"]
 decoy_id = label_map["bacteria_decoy_id"]
 inv_targets = {v: k for k, v in targets.items()}
 
-# taxid -> slug（由 DB 的 seqid2taxid.map 反推）
+# taxid -> slug (inverted from the DB's seqid2taxid.map)
 taxid2slug = {}
 for line in open(DB / "seqid2taxid.map", encoding="utf-8"):
     seqid, taxid = line.split("\t")
@@ -41,7 +42,7 @@ for npz_name, short in SETS.items():
         f = line.rstrip("\n").split("\t")
         status, taxid = f[0], f[2]
         if status == "U" or taxid not in taxid2slug:
-            preds.append(decoy_id)          # 未分类或非物种级调用 → 背景
+            preds.append(decoy_id)          # unclassified / above species rank -> background
         else:
             slug = taxid2slug[taxid]
             preds.append(targets.get(slug, decoy_id))

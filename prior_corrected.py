@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-"""Step 10 — 先验校正工作点（prior-corrected operating point, m=3, tau=0.3）。
-对已发表 checkpoint 在 T1-T4 上施加背景概率 ×3（训练时背景过采样系数的精确
-逆）+ 0.3 置信阈，写 results/eval_t*_pc.json 供 Table 2 新行使用。
+"""Step 10 — prior-corrected operating point (m=3, tau=0.3).
+Applies a x3 background-probability correction to the released checkpoint on
+T1-T4 (the exact inverse of the training-time background oversampling) plus a
+0.3 confidence threshold, writing results/eval_t*_pc.json, which backs the
+prior-corrected rows of Table 2.
 """
 import importlib
 import sys

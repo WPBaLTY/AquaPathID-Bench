@@ -1,4 +1,4 @@
-"""Step 05 鈥?Baseline methods: (A) Kraken2-style exact minimizer-LCA k-mer
+"""Step 05 —Baseline methods: (A) Kraken2-style exact minimizer-LCA k-mer
 classifier (in-house, NumPy) and (B) BLASTN megablast alignment (NCBI BLAST+).
 
 Both baselines are evaluated on the same test sets as AquaPathNet:
@@ -6,7 +6,7 @@ Both baselines are evaluated on the same test sets as AquaPathNet:
 
 (A) Index: k=31 exact 2-bit codes, minimizer sampling (w=11 window), built ONLY
     from training genomes. k-mers shared by >1 class collapse to "ambiguous"
-    (virtual root, dropped from votes) 鈥?i.e., species-level LCA collapse.
+    (virtual root, dropped from votes) —i.e., species-level LCA collapse.
     A read is assigned to the class with most distinct minimizer votes if
     votes >= min_votes, else BACKGROUND.
 
@@ -447,7 +447,7 @@ def main() -> None:
         run_kmerlog(log, args.task)
 
     append_execution_log(
-        f"鍩虹嚎 {args.task} ({','.join(baselines)}) 瀹屾垚 | results/eval_*_lca.json, eval_*_blast.json")
+        f"baselines {args.task} ({','.join(baselines)}) done | results/eval_*_lca.json, eval_*_blast.json")
 
 
 if __name__ == "__main__":

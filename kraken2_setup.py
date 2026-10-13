@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Kraken2 官方基线准备（重启 WSL 前的全部准备工作）：
-1) 从 npz 导出 T1/T2/T3/T4 查询 FASTA
-2) 下载 NCBI taxdump（names/nodes）
-3) 构建 kraken2_db: taxonomy + seqid2taxid.map + library/addition.fna
-   （仅 104 个训练基因组，与其它基线严格同库）
-4) 下载 Kraken2 源码（GitHub）
-5) 预写 WSL 一键脚本 setup_and_run.sh
+"""Kraken2 official-baseline staging (everything to prepare before the WSL run):
+1) export T1/T2/T3/T4 query FASTA from the npz files
+2) download the NCBI taxdump (names/nodes)
+3) build kraken2_db: taxonomy + seqid2taxid.map + library/addition.fna
+   (the same 104 training genomes as every other baseline, strictly one library)
+4) download the Kraken2 source (from GitHub)
+5) pre-write the one-shot WSL script setup_and_run.sh
 """
 import os
 import io
@@ -41,12 +41,13 @@ label_map = json.loads((READS / "label_map.json").read_text(encoding="utf-8"))
 target_ids = label_map["bacteria"]          # slug -> class id (0..23)
 decoy_id = label_map["bacteria_decoy_id"]   # 24 = background
 
-# 病毒 manifest 无 taxid 且名称拼写与 NCBI 不同，此处为 NCBI 真实分类（叶子节点）
+# the virus manifest has no taxids and its name spellings differ from
+# NCBI, so the real NCBI leaf taxids are hard-coded here
 TAXID_OVERRIDES = {"nnv": "43763",      # Redspotted grouper nervous necrosis virus
                    "svcv": "696863",    # Spring viraemia of carp virus
                    "wssv": "92652"}     # Shrimp white spot syndrome virus
 
-# ---- 1) 导出查询 FASTA ----
+# ---- 1) export query FASTA ----
 for name in SETS:
     z = np.load(READS / f"{name}.npz", allow_pickle=True)
     keys = list(z.keys())
@@ -55,14 +56,15 @@ for name in SETS:
     code = "ACGTN"
     n_written = 0
     with open(out, "w", newline="\n") as fh:
-        if seqs.ndim == 2:   # 定长窗口
+        if seqs.ndim == 2:   # fixed-length windows
             for i, s in enumerate(seqs):
                 fh.write(f">{name}_r{i}\n")
                 fh.write("".join(code[int(b)] for b in s) + "\n")
                 n_written += 1
-        else:                # 平铺数组 + read_offset（变长读段）
-            # npz 中 read_offset 存的是每条读段的"终点"（首条起点恒为 0，
-            # 与 04/05b 的 starts=concat([[0], off[:-1]]) 约定一致）
+        else:                # flat array + read_offset (variable-length reads)
+            # read_offset in the npz stores each read's END position (the
+            # first read starts at 0), matching the evaluate.py convention
+            # starts = concat([[0], off[:-1]])
             ends = z["read_offset"].astype(np.int64)
             starts = np.concatenate([[0], ends[:-1]])
             total = len(seqs)
@@ -108,14 +110,15 @@ def find_taxid(slug, acc):
         return TAXID_OVERRIDES[slug], "override"
     rec = man_by_key.get((slug, acc)) or man_by_slug.get(slug)
     nm = (rec or {}).get("species", "")
-    # 学名查得的当前 taxid 优先（manifest 里的可能是失效旧编号）
+    # prefer the current taxid resolved from the scientific name (the
+# manifest value may be a stale/retired id)
     if nm.lower() in name2taxid and name2taxid[nm.lower()] in node_set:
         return name2taxid[nm.lower()], "names.dmp"
     if rec and rec.get("taxid") and str(rec["taxid"]) in node_set:
         return str(rec["taxid"]), "manifest"
     return None, nm
 
-# manifest 索引：genomes 列表，记录含 slug/assembly/taxid/species
+# manifest index: the genomes list, with slug/assembly/taxid/species fields
 man_by_key = {}
 man_by_slug = {}
 for rec in manifest["genomes"]:
@@ -142,7 +145,7 @@ with open(DB / "seqid2taxid.map", "w", newline="\n") as out:
         n_mapped += 1
 print(f"train genomes={n_train}, mapped={n_mapped}, missing={sorted(set(missing))}")
 
-# library/addition.fna 预置（等价于 kraken2-build --add-to-library）
+# stage library/addition.fna (equivalent to kraken2-build --add-to-library)
 addition = DB / "library" / "addition.fna"
 if not addition.exists():
     shutil_copy = open(FASTA_DIR / "ref_bacteria.fna", "rb").read()
@@ -150,7 +153,7 @@ if not addition.exists():
     print(f"library/addition.fna staged "
           f"({addition.stat().st_size/1e6:.0f} MB)")
 
-# ---- 4) Kraken2 源码 ----
+# ---- 4) Kraken2 source ----
 ver_file = SRC / "kraken2-master.tar.gz"
 if not ver_file.exists():
     print("downloading kraken2 source ...")
@@ -166,8 +169,9 @@ if not ver_file.exists():
                         "tar.gz/refs/heads/master"], check=True)
     print("kraken2 source:", ver_file.stat().st_size / 1e6, "MB")
 
-# ---- 5) WSL 一键脚本 ----
-# 把数据根目录换算成 WSL 挂载路径（D:\data -> /mnt/d/data；已是 POSIX 则原样）
+# ---- 5) one-shot WSL script ----
+# convert the data root to a WSL mount path (D:\data -> /mnt/d/data;
+# POSIX paths pass through unchanged)
 if len(DATA.drive) == 2 and DATA.drive[1] == ":":
     wsl_data = "/mnt/" + DATA.drive[0].lower() + DATA.as_posix()[2:]
 else:
